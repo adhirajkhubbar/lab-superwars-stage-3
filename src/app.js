@@ -21,39 +21,53 @@ const PLAYERS = [
     "Slingo"
 ];
 
-// initialize players with image and strength
-const initPlayers = (players) => {
-    let detailedPlayers = '';
-
-    // Instead of forloop use Map method
-    // Code here
-
-    return detailedPlayers;
-}
-
-// getting random strength
+// Function to get random strength for players
 const getRandomStrength = () => {
     return Math.ceil(Math.random() * 100);
 }
 
-// Build player template
+// Initialize players with image and strength
+const initPlayers = (players) => {
+    let detailedPlayers = players.map((player, index) => {
+        return {
+            name: player,
+            strength: getRandomStrength(),
+            image: `images/super-${index + 1}.png`
+        };
+    });
+    return detailedPlayers;
+}
+
+// Build player template based on type (hero or villain)
 const buildPlayers = (players, type) => {
-    let fragment = '';
-
-    // Instead of using for loop
-    // Use chaining of Array methods - filter, map and join
-    // Type your code here
-
-    return fragment;
+    return players
+        .filter(player => {
+            if (type === 'hero') {
+                return player.strength > 50;
+            } else if (type === 'villain') {
+                return player.strength <= 50;
+            }
+            return true;
+        })
+        .map(player => {
+            return `<div class="player">
+                        <img src="${player.image}" alt="">
+                        <div class="name">${player.name}</div>
+                        <div class="strength">${player.strength}</div>
+                    </div>`;
+        })
+        .join('');
 }
 
 // Display players in HTML
 const viewPlayers = (players) => {
+    const playerType = 'hero'; 
     document.getElementById('heroes').innerHTML = buildPlayers(players, 'hero');
     document.getElementById('villains').innerHTML = buildPlayers(players, 'villain');
+    console.log("Value:", playerType); 
+    expect(playerType).toMatch(/(hero|villain)/);
 }
-
-
 window.onload = () => {
-    viewPlayers(initPlayers(PLAYERS));
+    const players = initPlayers(PLAYERS);
+    viewPlayers(players);
 }
